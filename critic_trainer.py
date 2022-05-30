@@ -1,5 +1,6 @@
 """This is code for training a critic with or without minibatch optimal ray selection.
-Once the critic is trained, contour plots are made which record some gradient flow lines for n points. 
+Once the critic is trained, contour plots are made which record some gradient flow lines for n points. An empirical
+histogram for the gradient penalty sampling strategy is also created.
 """
 
 import os
@@ -35,8 +36,8 @@ from get_data import get_data
 
 # get command line args~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-parser = argparse.ArgumentParser('Testbed for applying backward Euler to learned critics')
-parser.add_argument('--save_dir', type=str, required=True, help='directoy for saving')
+parser = argparse.ArgumentParser('Testbed for training critics with MORS')
+parser.add_argument('--save_dir', type=str, required=True, help='directory for saving')
 
 # inputs for datasets
 parser.add_argument('--source', type=str, required=True, default='circle',
@@ -51,23 +52,23 @@ parser.add_argument('--target', type=str, required=True, default='circle',
                     help='Which target distribution?')
 parser.add_argument('--target_params', nargs='+', help='A list specifying the target dist. Enter 0 to get syntax',
                     required=True, type=float)
+parser.add_argument('--bs', type=int, default=128, help='batch size')
 
 # critic parameters
-parser.add_argument('--dim', type=int, default=64, help='int determining width of critic')
-parser.add_argument('--lamb', type=float, default=100., help='parameter multiplying gradient penalty')
-parser.add_argument('--clr', type=float, default=1e-4, help='learning rate for critic updates')
+parser.add_argument('--dim', type=int, default=128, help='int determining width of critic')
+parser.add_argument('--lamb', type=float, default=0.1, help='parameter multiplying gradient penalty')
+parser.add_argument('--clr', type=float, default=0.01, help='learning rate for critic updates')
 parser.add_argument('--critters', type=int, default=5000, help='number of iters to train critic')
 parser.add_argument('--ot', action='store_true', help='use minibatch optimal ray selection')
 parser.add_argument('--p', type=int, default=1, help='power for ot cost matrix; only used if ot is True')
 parser.add_argument('--relu', action='store_true', help='use relus in discriminator')
-parser.add_argument('--bs', type=int, default=128, help='batch size')
 
-#plotting args
+# plotting args
 parser.add_argument('--num_points', type=int, default=20,
                     help='For generating flow lines - Number of points to flow')
-parser.add_argument('--num_step', type=int, default=100,
+parser.add_argument('--num_step', type=int, default=200,
                     help='For generating flow lines - Number of steps for gradient descent iterations')
-parser.add_argument('--step_size', type=float, default=0.1,
+parser.add_argument('--step_size', type=float, default=0.001,
                     help='For generating flow lines - Step size for gradient descent iterations')
 parser.add_argument('--nice_contours', action='store_true',
                     help='use automatic spacing for contours. If False, use spacing of 1')
@@ -78,11 +79,8 @@ parser.add_argument('--ywin', nargs='+',
                     help='A list for plotting window. Syntax: [ylow, yhigh]. If not specified'
                          'will compute automatically from data', default=[0, 0], type=float)
 
-
-
 # random seed
-parser.add_argument('--seed', type=int, default=-1, help='Set random seed for reproducibility')
-
+parser.add_argument('--seed', type=int, default=-1, help='Reproducible if not equal to -1')
 
 args = parser.parse_args()
 
@@ -133,7 +131,7 @@ start_time = time.time()
 max_len = 1000000  # max number of points for histogram
 interpolates_history = []
 
-flowed_points = get_data(source_gen)[0:args.num_points,:]
+flowed_points = get_data(source_gen)[0:args.num_points, :]
 
 # Train critic
 for iteration in range(args.critters):
@@ -174,25 +172,25 @@ for iteration in range(args.critters):
     nopen = D_real + D_fake
     optimizerD.step()
 
+    # record training metrics
     log.plot('dcost', D_cost.cpu().data.numpy())
     log.plot('time', time.time() - start_time)
     log.plot('no_gpen', nopen.cpu().data.numpy())
     if args.ot:
         log.plot('mb_Wcost', mb_wcost)
-    log.tick()
+    log.tick()  # increments log by one
     if iteration % 1000 == 999 or iteration == args.critters - 1:
-        log.flush(args.save_dir)
-
+        log.flush(args.save_dir)  # saves log
 
 interpolates_history = torch.cat(interpolates_history, dim=0)
 if args.xwin == [0, 0] or args.ywin == [0, 0]:
     _ = window_finder.window_finder(interpolates_history, args)  # finds window for plotting from data
 
 # plot initial distributions, contour, and sigma histogram
-scatter_plot(generator, '0', args)
-contour_plot(critic, args,  data=flowed_points)
+scatter_plot(generator, args)
+contour_plot(critic, args, data=flowed_points)
 sigma_plot(interpolates_history, iteration, args)
 
+# save log to reflect training setup
 path = os.path.join(args.save_dir, 'log.pkl')
 os.replace(path, os.path.join(args.save_dir, 'log_ot{}_p{}.pkl'.format(args.ot, args.p)))
-

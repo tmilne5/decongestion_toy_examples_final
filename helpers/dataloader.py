@@ -383,5 +383,3 @@ if __name__ == "__main__":
     circle_loader = circle(parameters, 128)
     line_loader = line(parameters, 128)
     gaussian_loader = gaussian(parameters, 128)
-
-

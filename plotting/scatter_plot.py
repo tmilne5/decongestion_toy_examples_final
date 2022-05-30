@@ -1,4 +1,3 @@
-import torch
 import matplotlib.pyplot as plt
 import os
 import sys
@@ -9,20 +8,19 @@ from get_data import get_data
 import dataloader
 
 
-def scatter_plot(generator, frame, args, source_data = None, target_data = None):
+def scatter_plot(generator, args, source_data=None, target_data=None):
     """plots samples of real and fake distributions for 2D example
     Inputs
     - generator; generator for fake data from R^2 to R^2
-    - frame; index for saving picture
     - args; various arguments.
     - source/target_data: use these if you want to plot specific data
 
     Outputs
-    - None, saves scatter in args.temp_dir/scatter/gen{}.jpg
-    - Also, if frame = 00, updates args to specify view window"""
-
+    - None, saves scatter in args.save_dir/scatter/scatter.pdf
+    """
     num_samp = 1024
 
+    # re-init dataloaders for larger batch size
     if source_data == None:
         source_loader = getattr(dataloader, args.source)(args.source_params, num_samp)
         source_gen = iter(source_loader)

@@ -4,13 +4,14 @@ import os
 import torch
 from steptaker import steptaker
 
+
 def contour_plot(critic, args, data=None):
     """
     Generates a contour plot of the critic
     Inputs:
     - critic; the trained neural network you want to make a contour plot for
-    - args; full list of args to upper function
-    - data; if not None, do a gradient descent for the data on the critic, and superimpose it on the contour
+    - args; full list of args to critic_trainer.py
+    - data; if not None, do gradient descent for the data on the critic, and superimpose it on the contour
     """
     num_points = 100  # number of points to sample in each axis
 
@@ -45,7 +46,7 @@ def contour_plot(critic, args, data=None):
             # applies one step of forward Euler discretization for gradient descent
             data = steptaker(data, critic, args.step_size, num_step=1)  # data is num_points x 2
 
-        flow = torch.stack(flow, dim = 0)  # flow is num_step x num_points x 2
+        flow = torch.stack(flow, dim=0)  # flow is num_step x num_points x 2
         for curve in range(num_points):
             plt.plot(flow[:, curve, 0], flow[:, curve, 1], color='#ff964f')  # pastel orange from xkcd
             plt.scatter(flow[0, curve, 0], flow[0, curve, 1], color='#ff964f', s=40, zorder=100)  # initial point

@@ -8,11 +8,11 @@ def sigma_plot(samples, iteration, args):
     Generates an empirical histogram of sigma using the generator
     Inputs
     - samples; list of samples from sigma
-    - iteration; generator iteration at which they are captured
-    - args; arguments to wgan_gp_ot_2d.py
+    - iteration; iteration at which they are captured
+    - args; arguments to critic_trainer.py
 
     Outputs
-    - sigma.pdf; an empirical histogram of sigma saved in args.save_dir
+    - an empirical histogram of sigma saved in args.save_dir/sigmas
     """
 
     range = np.array([args.xwin, args.ywin])

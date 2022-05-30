@@ -1,8 +1,21 @@
 import torch
 from torch import autograd
 
+
 # ~~~~~~Gradient Penalty
 def calc_gradient_penalty(model, real_data, fake_data, args, return_samples=False):
+    """
+     Code for computing gradient penalty from WGAN-GP
+    Inputs:
+    - model; critic network
+    - real_data; batch of data from nu
+    - fake_data; batch of data from mu
+    - args; args to critic_trainer.py
+    - return_samples; if true, returns interpolates
+    Outputs:
+    - gradient penalty; gradient penalty term in loss function
+    - interpolates; only returned in return_samples = True
+    """
     use_cuda = torch.cuda.is_available()
     bs = real_data.shape[0]
 

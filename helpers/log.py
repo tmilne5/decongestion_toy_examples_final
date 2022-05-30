@@ -1,3 +1,5 @@
+"""Logging code initially taken from github.com/caogang/wgan-gp"""
+
 import numpy as np
 
 import collections

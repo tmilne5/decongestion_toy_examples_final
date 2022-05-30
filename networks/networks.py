@@ -1,7 +1,8 @@
 import torch.nn as nn
 import torch
-import numpy as np
 
+
+"""A simple fully connected discriminator. It has a scalar output, 2 layers, and dim hidden units"""
 
 class Discriminator(nn.Module):
 
