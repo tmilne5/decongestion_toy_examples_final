@@ -7,7 +7,6 @@ sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), '..', 'helpers'))
 from get_data import get_data
 import dataloader
-from to_polar import to_polar
 
 
 def scatter_plot(generator, frame, args, source_data = None, target_data = None):
@@ -38,29 +37,15 @@ def scatter_plot(generator, frame, args, source_data = None, target_data = None)
     else:
         real = target_data
 
-    if args.to_polar:
-        real = to_polar(real)
-        fake = to_polar(fake)
-
-    if frame == '00':  # if you're at the start of training, specify window
-        fulldata = torch.cat((real, fake), dim=0)
-        mins, _ = torch.min(fulldata, dim=0)  # x min, then y min
-        mins = mins.data.cpu().numpy()
-        maxs, _ = torch.max(fulldata, dim=0)
-        maxs = maxs.data.cpu().numpy()
-        spreads = maxs - mins
-
-        args.xwin = [-(maxs[0] + 0.25 * spreads[0]), maxs[0] + 0.25 * spreads[0]]#[mins[0] - 0.25 * spreads[0], maxs[0] + 0.25 * spreads[0]]
-        args.ywin = [-(maxs[1] + 0.25 * spreads[1]), maxs[1] + 0.25 * spreads[1]]#[mins[1] - 0.25 * spreads[1], maxs[1] + 0.25 * spreads[1]]
     real = real.data.cpu().numpy()
     fake = fake.data.cpu().numpy()
 
-    plt.scatter(real[:, 0], real[:, 1], alpha=0.1, label='nu')
-    plt.scatter(fake[:, 0], fake[:, 1], alpha=0.1, label='mu')
+    plt.scatter(fake[:, 0], fake[:, 1], alpha=0.1, label=r'$\mu$')
+    plt.scatter(real[:, 0], real[:, 1], alpha=0.1, label=r'$\nu$')
     plt.xlim(args.xwin[0], args.xwin[1])
     plt.ylim(args.ywin[0], args.ywin[1])
     plt.title('Scatter Plot')
     plt.legend()
-    os.makedirs(os.path.join(args.temp_dir, 'scatter'), exist_ok=True)
-    plt.savefig(os.path.join(args.temp_dir, 'scatter', 'gen{}_ot{}_bradford{}.pdf'.format(frame, args.ot, args.bradford_c)))
+    os.makedirs(os.path.join(args.save_dir, 'scatter'), exist_ok=True)
+    plt.savefig(os.path.join(args.save_dir, 'scatter', 'scatter.pdf'))
     plt.close()

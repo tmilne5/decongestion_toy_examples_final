@@ -2,15 +2,24 @@ import ot
 import numpy as np
 
 
-def compute_emd(x, y):
-    # takes data sets x and y, and returns the Wasserstein 1 distance between them
+def compute_emd(x, y, p):
+    """
+    Takes datasets x, y, and returns Wasserstein-p distance between them
+    Inputs
+    - x; source data. dimensions bs x d
+    - y; target data. dimensions bs x d
+    - p; power for cost matrix. 1 or 2
+    Outputs
+    - G0; permutation matrix representing optimal pairing between x and y
+    - cost; transport cost from x to y.
+    """
     # assumes datasets are equal size
     n = x.shape[0]
 
     a, b = np.ones((n,)) / n, np.ones((n,)) / n  # uniform distribution on samples
 
     # loss matrix
-    M = ot.dist(x, y, metric='euclidean')
+    M = ot.dist(x, y, metric='euclidean' if p == 1 else 'sqeuclidean')
     maxx = M.max()
     M /= M.max()
 
