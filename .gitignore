@@ -1,0 +1,12 @@
+#files to be ignored by git
+#
+#ignore pycache
+__pycache__/
+
+#ignore results
+results/
+
+descend_backward_euler.py
+find_good_mu.py
+to_polar.py
+dcost_plot.py
