@@ -1,0 +1,30 @@
+{
+  "save_dir": ".\\results\\figs_for_thesis\\2mode_to_2mode\\",
+  "source": "line",
+  "source_params": [
+    0.1,
+    2.0,
+    0.0,
+    0.5
+  ],
+  "target": "line",
+  "target_params": [
+    0.1,
+    2.0,
+    2.0,
+    0.5
+  ],
+  "dim": 128,
+  "lamb": 0.1,
+  "clr": 0.01,
+  "critters": 5000,
+  "ot": true,
+  "p": 2,
+  "relu": false,
+  "bs": 128,
+  "num_points": 20,
+  "num_step": 200,
+  "step_size": 0.001,
+  "nice_contours": true,
+  "seed": 0
+}

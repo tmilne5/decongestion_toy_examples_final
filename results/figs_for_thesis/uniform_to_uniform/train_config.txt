@@ -1,0 +1,38 @@
+{
+  "save_dir": ".\\results\\figs_for_thesis\\uniform_to_uniform\\",
+  "source": "uniform",
+  "source_params": [
+    0.0,
+    0.1,
+    -2.0,
+    2.0
+  ],
+  "target": "uniform",
+  "target_params": [
+    1.9,
+    2.0,
+    -2.0,
+    2.0
+  ],
+  "dim": 128,
+  "lamb": 0.1,
+  "clr": 0.01,
+  "critters": 5000,
+  "ot": true,
+  "p": 2,
+  "relu": false,
+  "bs": 128,
+  "num_points": 20,
+  "num_step": 200,
+  "step_size": 0.001,
+  "nice_contours": true,
+  "xwin": [
+    -0.5,
+    2.5
+  ],
+  "ywin": [
+    -2.5,
+    2.5
+  ],
+  "seed": 0
+}
