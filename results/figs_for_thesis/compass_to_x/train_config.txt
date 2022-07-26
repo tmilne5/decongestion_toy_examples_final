@@ -1,0 +1,40 @@
+{
+  "save_dir": ".\\results\\figs_for_thesis\\compass_to_x\\",
+  "source": "rotated_circle",
+  "source_params": [
+    0.1,
+    0.1,
+    4.0,
+    0.0,
+    0.0
+  ],
+  "target": "rotated_circle",
+  "target_params": [
+    0.3,
+    0.01,
+    4.0,
+    0.0,
+    0.785
+  ],
+  "dim": 128,
+  "lamb": 0.1,
+  "clr": 0.01,
+  "critters": 5000,
+  "ot": true,
+  "p": 2,
+  "relu": false,
+  "bs": 128,
+  "num_points": 20,
+  "num_step": 200,
+  "step_size": 0.001,
+  "nice_contours": true,
+  "xwin": [
+    -2.3,
+    2.3
+  ],
+  "ywin": [
+    -2.3,
+    2.3
+  ],
+  "seed": 0
+}

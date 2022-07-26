@@ -1,0 +1,38 @@
+{
+  "save_dir": ".\\results\\figs_for_thesis\\fat_gauss_to_north_south\\",
+  "source": "gaussian",
+  "source_params": [
+    0.0,
+    0.5,
+    0.5
+  ],
+  "target": "rotated_circle",
+  "target_params": [
+    0.05,
+    0.3,
+    2.0,
+    0.0,
+    1.57
+  ],
+  "dim": 128,
+  "lamb": 0.1,
+  "clr": 0.01,
+  "critters": 5000,
+  "ot": true,
+  "p": 2,
+  "relu": false,
+  "bs": 128,
+  "num_points": 20,
+  "num_step": 200,
+  "step_size": 0.001,
+  "nice_contours": true,
+  "xwin": [
+    -2.5,
+    2.5
+  ],
+  "ywin": [
+    -2.5,
+    2.5
+  ],
+  "seed": 0
+}
